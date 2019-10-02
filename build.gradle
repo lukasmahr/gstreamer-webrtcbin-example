@@ -1,0 +1,54 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'java-library'
+
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+        }
+    }
+}
+
+jar {
+    doFirst {
+        from { configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) } }
+    }
+    exclude 'META-INF/*.RSA', 'META-INF/*.SF','META-INF/*.DSA'
+    manifest {
+        attributes(
+                'Main-Class': 'com.lion5.cctv.webrtctest.WebRTCTest'
+        )
+    }
+    archiveName 'gstwebrtc.jar'
+}
+
+dependencies {
+    compile "net.java.dev.jna:jna:5.2.0"
+    compile "org.freedesktop.gstreamer:gst1-java-core:1.1.0"
+
+    // Websockets
+    compile 'org.asynchttpclient:async-http-client:2.7.0'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.9.8'
+    compile group: 'log4j', name: 'log4j', version: '1.2.17'
+    compile group: 'org.eclipse.jetty', name: 'jetty-util', version: '9.2.9.v20150224'
+    compile group: 'org.eclipse.jetty', name: 'jetty-io', version: '9.2.11.v20150529'
+    compile group: 'org.eclipse.jetty', name: 'jetty-http', version: '9.2.9.v20150224'
+    compile group: 'org.eclipse.jetty.websocket', name: 'websocket-api', version: '9.2.9.v20150224'
+    compile group: 'org.eclipse.jetty.websocket', name: 'websocket-common', version: '9.2.9.v20150224'
+    compile group: 'org.eclipse.jetty.websocket', name: 'websocket-servlet', version: '9.2.9.v20150224'
+    compile group: 'org.eclipse.jetty.websocket', name: 'websocket-client', version: '9.2.9.v20150224'
+    compile group: 'commons-cli', name: 'commons-cli', version: '1.4'
+    compile group: 'javax.sip', name: 'jain-sip-api', version: '1.2.1.4'
+    compile group: 'javax.sip', name: 'jain-sip-ri', version: '1.2.233'
+
+
+
+    // Logging
+    compile 'org.slf4j:slf4j-simple:1.8.0-beta2'
+}
